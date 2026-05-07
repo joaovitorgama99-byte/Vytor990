@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Controle Pessoal de Financas</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Controle pessoal</p>
+          <h1>Minhas financas</h1>
+        </div>
+        <div class="status" id="storageStatus">Modo local</div>
+      </header>
+
+      <section class="summary-grid" aria-label="Resumo financeiro">
+        <article class="summary-card income">
+          <span>Receitas</span>
+          <strong id="incomeTotal">R$ 0,00</strong>
+        </article>
+        <article class="summary-card expense">
+          <span>Despesas</span>
+          <strong id="expenseTotal">R$ 0,00</strong>
+        </article>
+        <article class="summary-card balance">
+          <span>Saldo</span>
+          <strong id="balanceTotal">R$ 0,00</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form class="panel form-panel" id="transactionForm">
+          <h2>Novo lancamento</h2>
+
+          <label>
+            Descricao
+            <input id="description" name="description" type="text" placeholder="Ex: Salario, mercado..." required />
+          </label>
+
+          <div class="two-columns">
+            <label>
+              Valor
+              <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0,00" required />
+            </label>
+            <label>
+              Data
+              <input id="transactionDate" name="transactionDate" type="date" required />
+            </label>
+          </div>
+
+          <div class="two-columns">
+            <label>
+              Tipo
+              <select id="type" name="type" required>
+                <option value="expense">Despesa</option>
+                <option value="income">Receita</option>
+              </select>
+            </label>
+            <label>
+              Categoria
+              <input id="category" name="category" type="text" placeholder="Ex: Casa" required />
+            </label>
+          </div>
+
+          <button type="submit">Salvar lancamento</button>
+          <p class="message" id="formMessage" role="status"></p>
+        </form>
+
+        <section class="panel list-panel">
+          <div class="list-header">
+            <div>
+              <h2>Lancamentos</h2>
+              <p id="transactionCount">0 registros</p>
+            </div>
+            <input id="monthFilter" type="month" aria-label="Filtrar por mes" />
+          </div>
+
+          <div class="transactions" id="transactions"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
