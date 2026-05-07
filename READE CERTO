@@ -1,0 +1,57 @@
+Finance Vitor
+Sistema de controle financeiro pessoal feito em React, Vite e Tailwind CSS.
+
+Funcionalidades
+Cadastro de receitas e despesas.
+Parcelamento automatico para compras no credito.
+Debito automatico para Emprestimo, Consorcio e Financiamento.
+Resumo mensal com receitas, despesas e saldo previsto.
+Faturas agrupadas por mes de vencimento.
+Cadastros de bancos, fornecedores e categorias.
+Persistencia na nuvem com Supabase quando configurado.
+Fallback local no navegador quando a nuvem ainda nao estiver configurada.
+Configurar nuvem
+Crie um projeto no Supabase, habilite Email em Authentication e rode este SQL no editor SQL:
+
+create table if not exists public.finance_snapshots (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  workspace_id text not null,
+  data jsonb not null,
+  updated_at timestamptz not null default now(),
+  primary key (user_id, workspace_id)
+);
+
+alter table public.finance_snapshots enable row level security;
+
+create policy "Users can read own finance snapshot"
+on public.finance_snapshots
+for select
+using (auth.uid() = user_id);
+
+create policy "Users can insert own finance snapshot"
+on public.finance_snapshots
+for insert
+with check (auth.uid() = user_id);
+
+create policy "Users can update own finance snapshot"
+on public.finance_snapshots
+for update
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+Depois copie .env.example para .env e preencha:
+
+VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+VITE_SUPABASE_ANON_KEY=sua-chave-anon-public
+VITE_FINANCE_WORKSPACE_ID=vitor
+Para publicar como app na nuvem, envie o projeto para GitHub e conecte em Vercel ou Netlify. Configure as mesmas variaveis de ambiente no painel da hospedagem.
+
+Como executar
+Instale as dependencias:
+
+npm install
+Rode o servidor local:
+
+npm run dev
+Gere a versao de producao:
+
+npm run build
